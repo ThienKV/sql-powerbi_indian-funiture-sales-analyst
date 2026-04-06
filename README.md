@@ -1,130 +1,215 @@
-# 📊 SQL & Power BI Data Analytics Project
-## Medallion Architecture: Bronze – Silver – Gold
+# 📊 SQL & Power BI Data Analytics Project  
+## Indian Furniture Sales Dashboard (SSMS 21 → SQL → Power BI)
 
 ---
 
-### Overview
-This project demonstrates a **data analytics pipeline** built with **SQL** and **Power BI**, following the **Medallion Architecture** approach (Bronze → Silver → Gold).
+## 🇺🇸 Overview  
+This project demonstrates a **data analytics workflow** using **SQL Server (SSMS 21)** and **Power BI** to analyze **Indian furniture sales data**.
 
-The objective is to transform raw data into clean, structured, and business-ready datasets, then visualize insights using Power BI dashboards.
+The process includes:
+- Importing raw data into SQL Server  
+- Validating and cleaning data using SQL  
+- Transforming data into structured, analysis-ready datasets  
+- Building interactive dashboards in Power BI  
 
----
-
-### Bronze Layer – Raw Data
-**Purpose**
-- Store raw data from source systems
-- Preserve original data for auditing and traceability
-
-**Key Characteristics**
-- No business logic applied
-- Minimal formatting
-- Acts as a staging layer
+The objective is to convert raw data into **clean, reliable, and business-ready insights** for decision-making.
 
 ---
 
-### Silver Layer – Cleaned & Transformed Data
-**Purpose**
-- Clean and standardize raw data
-- Prepare datasets for analytical use
+## 🗄️ Data Import – SQL Server (SSMS 21)
 
-**Key SQL Operations**
-- Remove duplicates
-- Handle NULL or invalid values
-- Normalize data types
-- Apply basic transformations
+### Purpose
+- Load raw furniture sales data into SQL Server  
+- Create a centralized data storage  
 
----
+### Process
+- Import CSV/Excel files using:
+  - SQL Server Import Wizard  
+  - Flat File Import  
 
-### Gold Layer – Business & Analytics Data
-**Purpose**
-- Create business-ready datasets
-- Apply business logic and aggregations
-- Serve as the primary source for BI reporting
+### Output
+- Raw table (e.g., `furniture_sales_raw`)  
 
-**Key Outputs**
-- Aggregated metrics and KPIs
-- Fact and dimension tables
-- Optimized datasets for Power BI
+### Characteristics
+- No transformation applied  
+- Data remains close to source  
+- Used as input for further processing  
 
 ---
 
-### Power BI Visualization
-Power BI is used to:
-- Connect directly to the Gold Layer
-- Build interactive dashboards and reports
-- Visualize KPIs, trends, and business insights
+## 🧹 Data Validation & Cleaning (SQL)
+
+### Purpose
+- Ensure data accuracy and consistency  
+- Prepare dataset for analysis  
+
+### Key Operations
+- Check row count and completeness  
+- Remove duplicates  
+- Handle NULL values  
+- Standardize data types  
+- Filter invalid records  
 
 ---
 
-### Tech Stack
-- SQL
-- Power BI
-- Medallion Architecture
+## 🔄 Data Transformation (SQL)
+
+### Purpose
+- Structure data for analytics  
+- Create calculated metrics  
+
+### Key Transformations
+- Create derived metrics (e.g., average price)  
+- Group data by:
+  - Product category  
+  - City / region  
+- Prepare aggregated datasets  
+
+### Output
+- Cleaned dataset (e.g., `furniture_sales_clean`)  
 
 ---
 
-### Project Objectives
-- Practice real-world data modeling
-- Separate raw, clean, and business logic layers clearly
-- Build an end-to-end SQL to Power BI analytics workflow
+## 📊 Power BI Visualization
 
----
----
----
+### Purpose
+- Convert data into visual insights  
+- Support business analysis  
 
-### Tổng quan
-Dự án xây dựng **pipeline phân tích dữ liệu** bằng **SQL và Power BI**, áp dụng mô hình **Medallion Architecture** (Bronze → Silver → Gold).
+### Features
+- Direct connection to SQL Server  
+- Interactive dashboards  
+- Data filtering and exploration  
 
-Mục tiêu là chuyển dữ liệu thô thành **dữ liệu sạch, có cấu trúc và sẵn sàng cho nghiệp vụ**, sau đó trực quan hóa bằng Power BI.
-
----
-
-### Bronze Layer – Dữ liệu thô
-**Mục tiêu**
-- Lưu trữ dữ liệu nguyên bản từ nguồn
-- Đảm bảo khả năng kiểm tra và truy vết dữ liệu
-
-**Đặc điểm**
-- Không áp dụng logic nghiệp vụ
-- Chỉ xử lý định dạng tối thiểu
-- Đóng vai trò staging layer
+### Dashboards
+- **Sales Overview**: revenue, quantity, average price  
+- **Product Analysis**: performance by category  
+- **Regional Analysis**: sales by location  
+- **Trend Analysis**: sales over time  
 
 ---
 
-### Silver Layer – Dữ liệu đã làm sạch
-**Mục tiêu**
-- Làm sạch và chuẩn hóa dữ liệu
-- Chuẩn bị dữ liệu cho phân tích
-
-**Xử lý chính bằng SQL**
-- Loại bỏ dữ liệu trùng lặp
-- Xử lý giá trị NULL hoặc sai lệch
-- Chuẩn hóa kiểu dữ liệu
-- Thực hiện các biến đổi cơ bản
+## 🛠️ Tech Stack
+- SQL Server (SSMS 21)  
+- SQL  
+- Power BI  
 
 ---
 
-### Gold Layer – Dữ liệu nghiệp vụ & phân tích
-**Mục tiêu**
-- Tạo dữ liệu sẵn sàng cho báo cáo và BI
-- Áp dụng logic nghiệp vụ và tổng hợp dữ liệu
-
-**Kết quả**
-- KPI và metric phân tích
-- Bảng fact và dimension
-- Dữ liệu tối ưu cho Power BI
+## 🎯 Project Objectives
+- Practice real-world data handling in SQL Server  
+- Improve SQL data cleaning skills  
+- Build structured datasets for analytics  
+- Develop Power BI dashboards  
+- Generate business insights from data  
 
 ---
 
-### Power BI – Trực quan hóa
-Power BI dùng để:
-- Kết nối trực tiếp Gold Layer
-- Xây dựng dashboard và báo cáo tương tác
-- Phục vụ phân tích và ra quyết định
+---
+
+# 🇻🇳 Tổng quan dự án  
+## Dashboard Phân Tích Doanh Thu Nội Thất Ấn Độ
 
 ---
 
-### Mục tiêu dự án
-- Thực hành Medallion Architecture trong dự án thực tế
-- Phân tách rõ raw – clean – business data
-- Hoàn thiện workflow SQL → Power BI
+## 📌 Tổng quan  
+Dự án xây dựng **quy trình phân tích dữ liệu** bằng **SQL Server (SSMS 21)** và **Power BI** nhằm phân tích **dữ liệu bán hàng nội thất tại Ấn Độ**.
+
+Quy trình bao gồm:
+- Import dữ liệu thô vào SQL Server  
+- Kiểm tra và làm sạch dữ liệu bằng SQL  
+- Biến đổi dữ liệu thành dạng có cấu trúc  
+- Trực quan hóa dữ liệu bằng Power BI  
+
+Mục tiêu là tạo ra **dữ liệu sạch, đáng tin cậy và có giá trị phân tích** phục vụ ra quyết định.
+
+---
+
+## 🗄️ Import dữ liệu – SQL Server (SSMS 21)
+
+### Mục tiêu
+- Đưa dữ liệu vào hệ thống SQL Server  
+- Tạo nguồn dữ liệu tập trung  
+
+### Quy trình
+- Import file CSV/Excel bằng:
+  - SQL Server Import Wizard  
+  - Flat File Import  
+
+### Kết quả
+- Bảng dữ liệu thô (ví dụ: `furniture_sales_raw`)  
+
+### Đặc điểm
+- Dữ liệu giữ nguyên từ nguồn  
+- Chưa xử lý hoặc biến đổi  
+- Là đầu vào cho các bước tiếp theo  
+
+---
+
+## 🧹 Kiểm tra & Làm sạch dữ liệu (SQL)
+
+### Mục tiêu
+- Đảm bảo dữ liệu chính xác và nhất quán  
+- Chuẩn bị cho phân tích  
+
+### Xử lý chính
+- Kiểm tra số lượng và độ đầy đủ dữ liệu  
+- Loại bỏ dữ liệu trùng  
+- Xử lý giá trị NULL  
+- Chuẩn hóa kiểu dữ liệu  
+- Loại bỏ dữ liệu không hợp lệ  
+
+---
+
+## 🔄 Biến đổi dữ liệu (SQL)
+
+### Mục tiêu
+- Tổ chức dữ liệu phục vụ phân tích  
+- Tạo các chỉ số cần thiết  
+
+### Xử lý chính
+- Tạo metric (ví dụ: giá trung bình)  
+- Nhóm dữ liệu theo:
+  - Danh mục sản phẩm  
+  - Khu vực / thành phố  
+- Tổng hợp dữ liệu  
+
+### Kết quả
+- Dataset đã làm sạch (`furniture_sales_clean`)  
+
+---
+
+## 📊 Trực quan hóa – Power BI
+
+### Mục tiêu
+- Biến dữ liệu thành insight trực quan  
+- Hỗ trợ phân tích kinh doanh  
+
+### Tính năng
+- Kết nối trực tiếp SQL Server  
+- Dashboard tương tác  
+- Lọc và phân tích dữ liệu  
+
+### Dashboard chính
+- **Tổng quan doanh thu**  
+- **Phân tích sản phẩm**  
+- **Phân tích khu vực**  
+- **Phân tích xu hướng**  
+
+---
+
+## 🛠️ Công nghệ sử dụng
+- SQL Server (SSMS 21)  
+- SQL  
+- Power BI  
+
+---
+
+## 🎯 Mục tiêu dự án
+- Thực hành xử lý dữ liệu thực tế  
+- Nâng cao kỹ năng SQL  
+- Xây dựng dataset phân tích  
+- Thiết kế dashboard Power BI  
+- Tạo insight từ dữ liệu kinh doanh  
+
+---
