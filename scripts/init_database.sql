@@ -1,148 +1,115 @@
-/*
-=============================================
-Create Database and Schemas
-=============================================
-Subscription:
-  Script create a database named "DataWarehousePJ". This database set up 3 schemas within the database: "bronze","silver","gold".
-*/
+USE NewDatabase;
 
---- CREATE DATABASE AND SCHEMAS ---
-use master;
-go
-  
-create database DataWarehousePJ;
+---- A. DATA UNDERSTANDING
+--- 1. CHECK TABLE FORMAT
+SELECT TOP 10 * FROM order_;
+SELECT TOP 10 * FROM order_details;
+SELECT TOP 10 * FROM sales_target;
 
-use DataWarehousePJ;
-go
-  
-create schema bronze;
-go
-  
-create schema silver;
-go
-  
-create schema gold;
-go
+--- 2. CHECK INFO TABLE - DATA TYPE
+SELECT 
+	TABLE_NAME,
+	COLUMN_NAME,
+	DATA_TYPE
+FROM INFORMATION_SCHEMA.COLUMNS -- Note: Month_of_Order_Date đang là nvarchar
 
---- CREATE TABLES ---
-use DataWarehousePJ;
-go
+--- 3. CHECK DISTINCT COUNT
+SELECT COUNT(*) FROM dbo.order_;
+SELECT COUNT(*) FROM dbo.order_details;
+-- distinct order
+SELECT COUNT(DISTINCT Order_ID) FROM dbo.order_;
+SELECT COUNT(DISTINCT Order_ID) FROM dbo.order_details; -- Note: Nếu 2 số countdistinct khác thì đang có vấn đề về join
 
-create table bronze.crm_data_video  (
-	vid_creator_info nvarchar(max),
-	vid_creator_id nvarchar(max),
-	vid_video_info nvarchar(max),
-	vid_datetime nvarchar(max),
-	vid_prduct nvarchar(max),
-	vid_views nvarchar(max),
-	vid_likes nvarchar(max),
-	vid_cmts nvarchar(max),
-	vid_shares nvarchar(max),
-	vid_followers nvarchar(max),
-	vid_click_watchandfollow nvarchar(max),
-	vid_productimpression nvarchar(max),
-	vid_productclick nvarchar(max),
-	vid_cus nvarchar(max),
-	vid_orders nvarchar(max),
-	vid_orderssold nvarchar(max),
-	vid_gpm nvarchar(max),
-	vid_gmv nvarchar(max),
-	vid_ctr nvarchar(max),
-	vid_click_watchandfollow_ratio nvarchar(max),
-	vid_watchfinished nvarchar(max),
-	vid_clicktoorders nvarchar(max)
-);
 
-create table bronze.crm_data_live (
-	live_creator_id nvarchar(max),
-	live_creator_info nvarchar(max),
-	live_creator_codename nvarchar(max),
-	live_datetime nvarchar(max),
-	live_duration nvarchar(max),
-	live_prd_value nvarchar(max),
-	live_prd_adds nvarchar(max),
-	live_prds_sold nvarchar(max),
-	live_sku_created nvarchar(max),
-	live_sku_order nvarchar(max),
-	live_order_sold nvarchar(max),
-	live_numbers_cus nvarchar(max),
-	live_avgprice nvarchar(max),
-	live_clicktoorders nvarchar(max),
-	live_gmv nvarchar(max),
-	live_viewer_count nvarchar(max),
-	live_views nvarchar(max),
-	live_view_duration nvarchar(max),
-	live_cmts nvarchar(max),
-	live_shares nvarchar(max),
-	live_likes nvarchar(max),
-	live_followers nvarchar(max),
-	live_prdimpression nvarchar(max),
-	live_prdclick nvarchar(max),
-	live_ctr nvarchar(max)
-);
+---- B. DATA CLEANNING & VALIDATION
+--- 1.  MISSING VALUES
+SELECT *
+FROM order_
+WHERE
+	[Order_ID]	IS NULL OR
+    [Order_Date] IS NULL OR
+    [CustomerName] IS NULL OR
+    [State] IS NULL OR
+    [City] IS NULL;
 
-create table bronze.crm_data_videoaffiliate (
-	vid_aff_creator_info nvarchar(max),
-	vid_aff_creator_id nvarchar(max),
-	vid_aff_video_info nvarchar(max),
-	vid_aff_datetime nvarchar(max),
-	vid_aff_prduct nvarchar(max),
-	vid_aff_views nvarchar(max),
-	vid_aff_likes nvarchar(max),
-	vid_aff_cmts nvarchar(max),
-	vid_aff_shares nvarchar(max),
-	vid_aff_followers nvarchar(max),
-	vid_aff_click_watchandfollow nvarchar(max),
-	vid_aff_productimpression nvarchar(max),
-	vid_aff_productclick nvarchar(max),
-	vid_aff_cus nvarchar(max),
-	vid_aff_orders nvarchar(max),
-	vid_aff_orderssold nvarchar(max),
-	vid_aff_gpm nvarchar(max),
-	vid_aff_gmv nvarchar(max),
-	vid_aff_ctr nvarchar(max),
-	vid_aff_click_watchandfollow_ratio nvarchar(max),
-	vid_aff_watchfinished nvarchar(max),
-	vid_aff_clicktoorders nvarchar(max)
-);
+SELECT *
+FROM order_details
+WHERE
+	 [Order_ID] IS NULL OR
+     [Amount] IS NULL OR
+     [Profit] IS NULL OR
+     [Quantity] IS NULL OR
+     [Category] IS NULL OR
+     [Sub_Category] IS NULL;
 
-create table bronze.crm_data_liveaffiliate (
-	live_aff_live_info nvarchar(max),
-	live_aff_live_id nvarchar(max),
-	live_aff_live_starttime nvarchar(max),
-	live_aff_creatorname nvarchar(max),
-	live_aff_gmv nvarchar(max)
-);
+--- 2. CHECK OUTLIERS
+SELECT *
+FROM order_details
+WHERE 
+    Amount < 0 OR
+    Profit < 0 OR --- Note: Profit đang có giá trị âm nhưng lợi nhuận có thể âm
+    Quantity < 0;
 
-create table bronze.crm_scheme_product (
-	prdname_name nvarchar(max),
-	prdname_id nvarchar(max)
-);
+SELECT * 
+FROM sales_target
+WHERE
+    Target < 0;
 
-create table bronze.crm_scheme_brand (
-	brnd_channel nvarchar(max),
-	brnd_brand nvarchar(max),
-	brnd_creatorname nvarchar(max)
-);
+SELECT TOP 10 *
+FROM dbo.order_details
+ORDER BY Amount DESC;
 
-create table bronze.crm_scheme_ecentric (
-	ecentric_channel nvarchar(max),
-	ecentric_source nvarchar(max),
-	ecentric_name nvarchar(max)
-);
+--- 3. CHECK DUPLICATE
+SELECT Order_ID, COUNT(Order_ID) AS COUNTID
+FROM order_
+GROUP BY Order_ID
+HAVING COUNT(Order_ID) > 2;
 
-create table bronze.crm_scheme_ttcx (
-	ttcx_channel nvarchar(max),
-	ttcx_source nvarchar(max),
-	ttcx_name nvarchar(max)
-);
+SELECT Order_ID, COUNT(Order_ID) AS COUNTID2
+FROM order_details
+GROUP BY Order_ID
+HAVING COUNT(Order_ID) > 2;
 
-create table bronze.crm_scheme_individual (
-	indvdl_name nvarchar(max),
-	indvdl_type nvarchar(max)
-);
 
-create table bronze.crm_scheme_brandcreator (
-	brndcrt_brand nvarchar(max),
-	brndcrt_creatorname nvarchar(max)
-);
+
+---- C. DATA FINAL
+--- 1. DATA ORDER WITH DETAILS
+SELECT DISTINCT
+    o.Order_ID,
+    TRY_CONVERT(date, o.Order_Date) as Order_Date,
+    o.CustomerName,
+    o.State,
+    o.City,
+    od.Amount,
+    od.Profit,
+    od.Quantity,
+    od.Category,
+    od.Sub_Category
+FROM dbo.order_ o
+LEFT JOIN dbo.order_details od 
+    ON o.Order_ID = od.Order_ID
+
+--- 2. DATA TARGET
+SELECT *
+FROM sales_target
+
+--- 3. DATA COHORT
+SELECT CustomerName,Order_Date,SUM(Amount) AS Amount
+FROM 
+( 
+SELECT DISTINCT
+    o.Order_ID,
+    TRY_CONVERT(date, o.Order_Date) as Order_Date,
+    o.CustomerName,
+    o.State,
+    o.City,
+    od.Amount,
+    od.Profit,
+    od.Quantity,
+    od.Category,
+    od.Sub_Category
+FROM dbo.order_ o
+LEFT JOIN dbo.order_details od 
+    ON o.Order_ID = od.Order_ID
+) AS tb
+GROUP BY CustomerName,Order_Date
